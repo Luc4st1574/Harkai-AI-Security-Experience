@@ -118,9 +118,11 @@ export const Header = () => {
               </Link>
             ))}
             <div className="h-px bg-border my-2" />
-            <Button variant="ghost" className="justify-start w-full">
-              Iniciar Sesión
-            </Button>
+            <Link href={"/login"}>
+              <Button variant="ghost" className="justify-start w-full">
+                Iniciar Sesión
+              </Button>
+            </Link>
             <Button className="w-full bg-primary text-primary-foreground">
               Solicitar Demo
             </Button>

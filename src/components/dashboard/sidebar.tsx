@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useAuth } from "@/lib/auth/auth-context";
 
 const sidebarItems = [
   {
@@ -44,6 +45,12 @@ const sidebarItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+
+  const { logout, profile, user } = useAuth()
+
+  const handleLogout = async () => {
+    await logout();
+  }
 
   return (
     <aside className="fixed inset-y-0 left-0 z-50 w-64 border-r border-border bg-card/50 backdrop-blur-xl hidden md:flex flex-col">
@@ -106,7 +113,7 @@ export function Sidebar() {
             <p className="text-[10px] text-muted-foreground">Última sinc: Hace 2s</p>
         </div>
 
-        <button className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors w-full">
+        <button className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors w-full" onClick={handleLogout}>
           <LogOut className="h-4 w-4" />
           Cerrar Sesión
         </button>
