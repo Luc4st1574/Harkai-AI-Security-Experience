@@ -9,6 +9,7 @@ export interface UserProfile {
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
+  contactNumber?: string;
   role: UserRole;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createdAt?: any;
