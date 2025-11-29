@@ -1,19 +1,16 @@
 import { Button } from "@/components/ui/button";
 import {
-  Bell,
   Filter,
   Map as MapIcon,
   AlertTriangle,
   TrendingUp,
   Clock,
-  CalendarDays,
   MoreHorizontal,
 } from "lucide-react";
 
 export default function DashboardPage() {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {/* --- Top Bar: Título & Filtros Esenciales (Según PDF Pag 1) --- */}
       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-border pb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
