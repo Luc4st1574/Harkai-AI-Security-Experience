@@ -1,9 +1,7 @@
-// src/lib/db/user-service.ts
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { User } from "firebase/auth";
 
-// Definimos los roles permitidos en el sistema (Tipado fuerte)
 export type UserRole = "admin" | "company" | "user" | null;
 
 export interface UserProfile {

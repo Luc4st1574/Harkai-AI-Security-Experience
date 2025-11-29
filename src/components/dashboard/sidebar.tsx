@@ -54,13 +54,13 @@ export function Sidebar() {
              <Image 
               src="/harkai.png" 
               alt="Harkai Logo" 
-              width={28} 
-              height={28} 
+              width={80} 
+              height={80} 
              />
           </div>
-          <span className="text-lg font-bold tracking-tight text-foreground">
+          {/* <span className="text-lg font-bold tracking-tight text-foreground">
             HARKAI <span className="text-[10px] font-normal text-muted-foreground ml-1">v1.0</span>
-          </span>
+          </span> */}
         </Link>
       </div>
 
