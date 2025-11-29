@@ -10,20 +10,19 @@ export function Footer() {
 
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 relative z-10">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          {/* Brand Column */}
           <div className="space-y-8">
             <Link href="/" className="flex items-center gap-2">
               <div className="relative overflow-hidden rounded-lg">
                 <Image
                   src="/harkai.png"
                   alt="Harkai Logo"
-                  width={32}
-                  height={32}
+                  width={80}
+                  height={80}
                 />
               </div>
-              <span className="text-xl font-bold tracking-tight text-foreground">
+              {/* <span className="text-xl font-bold tracking-tight text-foreground">
                 HARKAI
-              </span>
+              </span> */}
             </Link>
             <p className="text-sm leading-6 text-muted-foreground max-w-xs">
               Inteligencia urbana en tiempo real. Transformamos reportes
