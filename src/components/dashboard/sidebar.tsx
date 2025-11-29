@@ -46,7 +46,7 @@ const sidebarItems = [
 export function Sidebar() {
   const pathname = usePathname();
 
-  const { logout, profile, user } = useAuth()
+  const { logout } = useAuth()
 
   const handleLogout = async () => {
     await logout();
