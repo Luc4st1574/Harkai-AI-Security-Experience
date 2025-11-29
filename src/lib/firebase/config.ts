@@ -19,6 +19,7 @@ const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let analytics: any = null;
 if (typeof window !== "undefined") {
   isSupported().then((supported) => {

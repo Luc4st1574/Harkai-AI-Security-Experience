@@ -12,7 +12,9 @@ export interface UserProfile {
   displayName: string | null;
   photoURL: string | null;
   role: UserRole;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createdAt?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   lastLogin?: any;
 }
 

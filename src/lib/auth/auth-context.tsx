@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     provider.setCustomParameters({ prompt: "select_account" });
     try {
       await signInWithPopup(auth, provider);
-      // eslint-disable-next-line no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (
         error.code === "auth/popup-closed-by-user" ||
