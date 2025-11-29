@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/lib/auth/auth-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,14 +17,27 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "HARKAI - Seguridad Urbana con IA",
-  description: "Plataforma de seguridad ciudadana basada en incidentes con verificación de inteligencia artificial",
+  description:
+    "Plataforma de seguridad ciudadana basada en incidentes con verificación de inteligencia artificial",
   authors: [
     {
-      name: "Lucas Tello",
+      name: "Lucas Santillán",
       url: "https://github.com/Luc4st1574",
     },
   ],
-  keywords: ["Harkai", "Seguridad Urbana", "Inteligencia Artificial", "Incidentes", "Verificación", "Plataforma", "Ciudadana", "Hackathon", "AI", "Security", "Experience"]
+  keywords: [
+    "Harkai",
+    "Seguridad Urbana",
+    "Inteligencia Artificial",
+    "Incidentes",
+    "Verificación",
+    "Plataforma",
+    "Ciudadana",
+    "Hackathon",
+    "AI",
+    "Security",
+    "Experience",
+  ],
 };
 
 export default function RootLayout({
@@ -42,8 +56,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* <Header /> */}
-          {children}
+          <AuthProvider>
+            {/* <Header /> */}
+            {children}
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
