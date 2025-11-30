@@ -9,13 +9,14 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
-import { HeatPoints, IncidentType } from "@/lib/types";
+import { HeatPoints } from "@/lib/types";
 
 const COLLECTION_NAME = "HeatPoints";
 
 export interface IncidentFilters {
   startDate?: Date;
   types?: number[];
+  district?: string;
 }
 
 export function subscribeToHeatPoints(
@@ -34,6 +35,10 @@ export function subscribeToHeatPoints(
 
   if (filters?.types && filters.types.length > 0) {
     constraints.push(where("type", "in", filters.types));
+  }
+
+  if (filters?.district && filters.district !== "all") {
+    constraints.push(where("district", "==", filters.district));
   }
 
   constraints.push(orderBy("timestamp", "desc"));
@@ -74,6 +79,16 @@ export async function createMockIncident(userId: string) {
     const types: number[] = [1, 2, 4];
     const randomType = types[Math.floor(Math.random() * types.length)];
 
+    const districts = [
+      "La Molina",
+      "Miraflores",
+      "San Isidro",
+      "Lima",
+      "Lince",
+    ];
+    const randomDistrict =
+      districts[Math.floor(Math.random() * districts.length)];
+
     const newPoint: Omit<HeatPoints, "id"> = {
       userId,
       type: randomType,
@@ -83,10 +98,13 @@ export async function createMockIncident(userId: string) {
       latitude: lat,
       longitude: lng,
       timestamp: Timestamp.now(),
+      district: randomDistrict,
+      city: "Lima",
+      country: "Peru",
     };
 
     await addDoc(collection(db, COLLECTION_NAME), newPoint);
-    console.log(`Incidente tipo '${randomType}' creado correctamente.`);
+    console.log(`Incidente tipo '${randomType}' creado en ${randomDistrict}.`);
   } catch (error) {
     console.error("Error creando mock:", error);
   }
