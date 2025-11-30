@@ -1,7 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
+import { FileBarChart, MapPin } from "lucide-react";
+import Link from "next/link";
 
 // Definimos la interfaz de props para tipado estricto
 interface DashboardHeaderProps {
@@ -69,12 +70,15 @@ export function DashboardHeader({
           ))}
         </div>
 
-        <Button
-          size="sm"
-          className="h-9 bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-        >
-          Exportar Reporte
-        </Button>
+        <Link href="/dashboard/analytics">
+          <Button
+            size="sm"
+            className="h-9 bg-primary text-primary-foreground shadow-lg shadow-primary/20 gap-2"
+          >
+            <FileBarChart className="h-4 w-4" />
+            Ver Analítica y Reportes
+          </Button>
+        </Link>
       </div>
     </div>
   );
