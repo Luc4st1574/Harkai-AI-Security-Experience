@@ -16,7 +16,7 @@ import { useDashboardMetrics } from "@/hooks/use-dashboard-metrics";
 import { INCIDENT_TYPES, INCIDENT_INDICES } from "@/lib/types";
 
 export default function DashboardPage() {
-  const { metrics, incidents, loading } = useDashboardMetrics();
+  const { metrics, incidents, loading, filters } = useDashboardMetrics();
 
   const TrendIcon =
     metrics.trend === "up"
@@ -53,33 +53,56 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {/* Botones de filtro visuales (sin lógica compleja por ahora) */}
+          {/* 1. Filtros de Tiempo ACTIVOS */}
           <div className="flex items-center p-1 bg-muted/50 rounded-lg border border-border">
             <Button
-              variant="ghost"
+              variant={filters.timeRange === "24h" ? "secondary" : "ghost"}
               size="sm"
-              className="h-8 text-xs font-medium hover:bg-background shadow-sm"
+              onClick={() => filters.setTimeRange("24h")}
+              className="h-8 text-xs font-medium shadow-sm"
             >
               24h
             </Button>
             <Button
-              variant="ghost"
+              variant={filters.timeRange === "7d" ? "secondary" : "ghost"}
               size="sm"
-              className="h-8 text-xs font-medium text-muted-foreground hover:text-foreground"
+              onClick={() => filters.setTimeRange("7d")}
+              className="h-8 text-xs font-medium"
             >
               7d
             </Button>
+            <Button
+              variant={filters.timeRange === "30d" ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => filters.setTimeRange("30d")}
+              className="h-8 text-xs font-medium"
+            >
+              30d
+            </Button>
           </div>
-          <Button variant="outline" size="sm" className="h-9 gap-2 text-xs">
-            <Filter className="h-3.5 w-3.5" />
-            Filtrar
-          </Button>
+
+          {/* 2. Filtro de Tipo (Ejemplo simple toggle para 'Robos') */}
           <Button
+            variant={
+              filters.selectedTypes.includes("theft") ? "default" : "outline"
+            }
             size="sm"
-            className="h-9 bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+            className="h-9 gap-2 text-xs"
+            onClick={() => {
+              // Lógica simple: Si está seleccionado lo quita, si no, lo pone como ÚNICO filtro
+              // (Para multi-select necesitarías una lógica un poco más compleja)
+              if (filters.selectedTypes.includes("theft")) {
+                filters.setSelectedTypes([]); // Reset
+              } else {
+                filters.setSelectedTypes(["theft"]); // Solo robos
+              }
+            }}
           >
-            Exportar Reporte
+            <Filter className="h-3.5 w-3.5" />
+            Solo Robos
           </Button>
+
+          {/* ... Exportar ... */}
         </div>
       </div>
 
@@ -232,12 +255,10 @@ export default function DashboardPage() {
                   <div className="text-right shrink-0">
                     <p className="text-[10px] text-muted-foreground">
                       {/* Formateo simple de hora */}
-                      {incident.timestamp
-                        ?.toDate()
-                        .toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                      {incident.timestamp?.toDate().toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
                   </div>
                 </div>

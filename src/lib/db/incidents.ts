@@ -5,22 +5,40 @@ import {
   onSnapshot,
   addDoc,
   Timestamp,
+  QueryConstraint,
+  where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { HeatPoints, IncidentType } from "@/lib/types";
 
 const COLLECTION_NAME = "HeatPoints";
 
-/**
- * Escucha en tiempo real los incidentes visibles.
- * @param callback Función que recibe el array de puntos actualizado
- * @returns Función para cancelar la suscripción (unsubscribe)
- */
-export function subscribeToHeatPoints(callback: (data: HeatPoints[]) => void) {
-  const q = query(
-    collection(db, COLLECTION_NAME),
-    orderBy("timestamp", "desc")
-  );
+export interface IncidentFilters {
+  startDate?: Date;
+  types?: IncidentType[];
+}
+
+export function subscribeToHeatPoints(
+  callback: (data: HeatPoints[]) => void,
+  filters?: IncidentFilters
+) {
+  const collectionRef = collection(db, COLLECTION_NAME);
+
+  const constraints: QueryConstraint[] = [];
+
+  if (filters?.startDate) {
+    constraints.push(
+      where("timestamp", ">=", Timestamp.fromDate(filters.startDate))
+    );
+  }
+
+  if (filters?.types && filters.types.length > 0) {
+    constraints.push(where("type", "in", filters.types));
+  }
+
+  constraints.push(orderBy("timestamp", "desc"));
+
+  const q = query(collectionRef, ...constraints);
 
   const unsubscribe = onSnapshot(
     q,

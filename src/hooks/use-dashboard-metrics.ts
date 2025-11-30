@@ -1,20 +1,51 @@
 // src/hooks/use-dashboard-metrics.ts
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { subscribeToHeatPoints } from "@/lib/db/incidents";
-import { HeatPoints } from "@/lib/types";
+import { HeatPoints, IncidentType } from "@/lib/types";
+
+export type TimeRange = "24h" | "7d" | "30d" | "all";
+
+const RISK_THRESHOLDS: Record<TimeRange, number> = {
+  "24h": 10,
+  "7d": 70,
+  "30d": 300,
+  all: 1000,
+};
 
 export function useDashboardMetrics() {
   const [incidents, setIncidents] = useState<HeatPoints[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [timeRange, setTimeRange] = useState<TimeRange>("24h");
+  const [selectedTypes, setSelectedTypes] = useState<IncidentType[]>([]);
+
   useEffect(() => {
-    const unsubscribe = subscribeToHeatPoints((data) => {
-      setIncidents(data);
-      setLoading(false);
-    });
+    setLoading(true);
+
+    let startDate: Date | undefined = undefined;
+    const now = new Date();
+
+    if (timeRange === "24h") {
+      startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    } else if (timeRange === "7d") {
+      startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    } else if (timeRange === "30d") {
+      startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    }
+
+    const unsubscribe = subscribeToHeatPoints(
+      (data) => {
+        setIncidents(data);
+        setLoading(false);
+      },
+      {
+        startDate,
+        types: selectedTypes,
+      }
+    );
 
     return () => unsubscribe();
-  }, []);
+  }, [timeRange, selectedTypes]);
 
   const frequency = incidents.length;
 
@@ -28,13 +59,9 @@ export function useDashboardMetrics() {
       const incidentTime = inc.timestamp.toDate().getTime();
       const diffHours = (now - incidentTime) / (1000 * 60 * 60);
 
-      if (diffHours <= 24) {
-        totalWeight += 1.0;
-      } else if (diffHours <= 24 * 7) {
-        totalWeight += 0.7;
-      } else {
-        totalWeight += 0.4;
-      }
+      if (diffHours <= 24) totalWeight += 1.0;
+      else if (diffHours <= 168) totalWeight += 0.7;
+      else totalWeight += 0.4;
     });
 
     return totalWeight / frequency;
@@ -42,33 +69,33 @@ export function useDashboardMetrics() {
 
   const recencyScore = calculateRecencyScore();
 
-  // 3. Riesgo Global (Risk Score)
-  // Fórmula base: R = (0.6 * F) + (0.4 * R_score)
-  // Ajuste para Dashboard: Normalizamos para tener un puntaje sobre 100.
-  // Asumimos un "Techo de Frecuencia" de 50 incidentes para el 100% (ajustable)
-  const MAX_EXPECTED_INCIDENTS = 20; 
-  
-  // Normalizamos Frecuencia (0 a 100)
-  const normalizedFrequency = Math.min((frequency / MAX_EXPECTED_INCIDENTS) * 100, 100);
-  
-  // Normalizamos Recencia (ya viene 0-1, lo pasamos a 0-100)
+  const currentMaxThreshold = RISK_THRESHOLDS[timeRange];
+
+  const normalizedFrequency = Math.min(
+    (frequency / currentMaxThreshold) * 100,
+    100
+  );
   const normalizedRecency = recencyScore * 100;
 
-  // Aplicamos los pesos de la fórmula: 60% Frecuencia + 40% Recencia
-  const riskScore = Math.round((0.6 * normalizedFrequency) + (0.4 * normalizedRecency));
+  const riskScore = Math.round(
+    0.6 * normalizedFrequency + 0.4 * normalizedRecency
+  );
 
-  // 4. Cálculo de Tendencia (Comparativa simple con un "ayer" simulado)
-  // En producción real, esto requeriría consultar datos históricos. 
-  // Por ahora, simulamos si el riesgo es alto (>50).
   const trend = riskScore > 50 ? "up" : "stable";
 
   return {
-    incidents, // Data cruda para listas o mapas
+    incidents,
     metrics: {
       frequency,
-      recency: recencyScore.toFixed(2), // Formato "0.85"
-      risk: riskScore, // Formato entero "72"
+      recency: recencyScore.toFixed(2),
+      risk: riskScore,
       trend,
+    },
+    filters: {
+      timeRange,
+      setTimeRange,
+      selectedTypes,
+      setSelectedTypes,
     },
     loading,
   };
