@@ -10,7 +10,7 @@ import { Loader2, Clock, ShieldAlert, Lock, Download, AlertTriangle } from "luci
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const APK_DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/harkai-3b3f7.appspot.com/o/harkai-app-release.apk?alt=media";
+const APK_DOWNLOAD_URL = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET + "/app-release.apk";
 
 export default function IncidentPublicPage() {
   const params = useParams();
