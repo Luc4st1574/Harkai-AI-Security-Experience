@@ -1,6 +1,5 @@
 "use client";
 
-import { MoreHorizontal } from "lucide-react";
 import { HeatPoints } from "@/lib/types";
 import { useConfig } from "@/lib/config/config-context";
 
@@ -15,9 +14,6 @@ export function IncidentList({ incidents }: IncidentListProps) {
     <div className="rounded-xl border border-border bg-card flex-1 flex flex-col overflow-hidden min-h-[400px]">
       <div className="p-4 border-b border-border flex justify-between items-center bg-muted/10">
         <h3 className="font-semibold text-sm">Incidentes del periodo</h3>
-        <button className="text-muted-foreground hover:text-foreground transition-colors">
-          <MoreHorizontal className="h-4 w-4" />
-        </button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-2 space-y-2">
