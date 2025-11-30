@@ -56,7 +56,7 @@ export function HeroSection() {
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-backwards delay-300">
             Convierte información generada por los usuarios en información relevante para {" "}
             <RotatingText
-              words={["Aseguradoras", "Municipios", "Consultoras", "Comercios"]}
+              words={["Aseguradoras", "Municipios", "Consultoras"]}
             />
           </p>
 
