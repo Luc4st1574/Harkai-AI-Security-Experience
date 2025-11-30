@@ -24,8 +24,6 @@ export const Header = () => {
   const navLinks = [
     { name: "Soluciones", href: "#features" },
     { name: "Cómo funciona", href: "#how-it-works" },
-    { name: "Impacto", href: "#stats" },
-    { name: "Contacto", href: "#contact" },
   ];
 
   return (
@@ -82,9 +80,6 @@ export const Header = () => {
               Iniciar Sesión
             </Button>
           </Link>
-          <Button className="shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300">
-            Solicitar Demo
-          </Button>
         </div>
 
         {/* Mobile Toggle */}
@@ -123,9 +118,6 @@ export const Header = () => {
                 Iniciar Sesión
               </Button>
             </Link>
-            <Button className="w-full bg-primary text-primary-foreground">
-              Solicitar Demo
-            </Button>
           </div>
         </div>
       )}

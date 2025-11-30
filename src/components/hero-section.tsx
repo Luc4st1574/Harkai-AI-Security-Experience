@@ -1,5 +1,38 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, ShieldCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+
+function RotatingText({ words }: { words: string[] }) {
+  const [index, setIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false);
+
+      setTimeout(() => {
+        setIndex((prevIndex) => (prevIndex + 1) % words.length);
+        setFade(true);
+      }, 500);
+
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [words.length]);
+
+  return (
+    <span
+      className={`inline-block transition-all duration-500 ease-in-out transform ${fade ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+        } text-foreground font-medium`}
+    >
+      {words[index]}
+    </span>
+  );
+}
 
 export function HeroSection() {
   return (
@@ -12,52 +45,32 @@ export function HeroSection() {
 
       <div className="relative mx-auto w-full max-w-7xl px-6 lg:px-8 z-10">
         <div className="mx-auto max-w-4xl text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary mb-8 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            <ShieldCheck className="mr-2 h-3.5 w-3.5" />
-            <span className="mr-2">Seguridad Urbana Inteligente</span>
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-            </span>
-          </div>
-
           {/* Headline */}
           <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-7xl text-balance animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-backwards delay-150">
-            Protege tu ciudad con <br className="hidden sm:block" />
+            Obtén analíticas en tiempo real <br className="hidden sm:block" />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-emerald-400">
-              verificación IA en tiempo real
+              de todo lo que pasa en la ciudad.
             </span>
           </h1>
 
-          {/* Subheadline basado en tu PDF */}
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-backwards delay-300">
-            Convierte reportes ciudadanos en inteligencia accionable. HARKAI
-            unifica datos urbanos, geolocalización y validación automática para
-            <span className="text-foreground font-medium">
-              {" "}
-              Aseguradoras, Municipios y Consultoras
-            </span>
+            Convierte información generada por los usuarios en información relevante para {" "}
+            <RotatingText
+              words={["Aseguradoras", "Municipios", "Consultoras", "Comercios"]}
+            />
             .
           </p>
 
-          {/* CTA Buttons */}
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-backwards delay-500">
-            <Button
-              size="lg"
-              className="h-12 px-8 text-base shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all rounded-full group"
-            >
-              Solicitar Demo
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-12 px-8 text-base border-primary/20 hover:bg-primary/5 rounded-full backdrop-blur-sm"
-            >
-              <Play className="mr-2 h-4 w-4" />
-              Ver Video Explicativo
-            </Button>
+            <Link href="/login">
+              <Button
+                size="lg"
+                className="h-12 px-8 text-base shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all rounded-full group"
+              >
+                Iniciar Sesión
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
