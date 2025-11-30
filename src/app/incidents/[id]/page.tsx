@@ -10,7 +10,9 @@ import { Loader2, Clock, ShieldAlert, Lock, Download, AlertTriangle } from "luci
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const APK_DOWNLOAD_URL = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET + "/app-release.apk";
+const BUCKET_NAME = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
+const FILE_PATH = "app-release.apk";
+const APK_DOWNLOAD_URL = `https://firebasestorage.googleapis.com/v0/b/${BUCKET_NAME}/o/${encodeURIComponent(FILE_PATH)}?alt=media`;
 
 export default function IncidentPublicPage() {
   const params = useParams();
