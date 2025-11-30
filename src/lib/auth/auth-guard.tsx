@@ -33,7 +33,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return null;
   }
 
-  if (profile?.role !== "company" && profile?.role !== "admin") {
+  if (profile?.role !== "company" && profile?.role !== "admin" && profile?.role !== "user") {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center bg-background p-6 text-center animate-in fade-in zoom-in duration-300 mt-8">
         <div className="rounded-full bg-destructive/10 p-4 mb-6 ring-1 ring-destructive/20">
