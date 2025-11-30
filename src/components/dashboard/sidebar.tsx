@@ -30,11 +30,6 @@ const sidebarItems = [
     href: "/dashboard/analytics",
     icon: FileText,
   },
-  {
-    title: "Configuración",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
 ];
 
 export function Sidebar() {
