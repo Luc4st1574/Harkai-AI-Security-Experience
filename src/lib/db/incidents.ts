@@ -15,7 +15,7 @@ const COLLECTION_NAME = "HeatPoints";
 
 export interface IncidentFilters {
   startDate?: Date;
-  types?: IncidentType[];
+  types?: number[];
 }
 
 export function subscribeToHeatPoints(
@@ -71,7 +71,7 @@ export async function createMockIncident(userId: string) {
     const lat = -12.0464 + (Math.random() - 0.5) * 0.02;
     const lng = -77.0428 + (Math.random() - 0.5) * 0.02;
 
-    const types: IncidentType[] = ["theft", "fire", "crash", "emergency"];
+    const types: number[] = [1, 2, 4];
     const randomType = types[Math.floor(Math.random() * types.length)];
 
     const newPoint: Omit<HeatPoints, "id"> = {

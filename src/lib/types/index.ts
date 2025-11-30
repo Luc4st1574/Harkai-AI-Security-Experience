@@ -8,32 +8,18 @@ export type HeatPoints = {
   latitude: number;
   longitude: number;
   timestamp: Timestamp;
-  type: IncidentType;
+  type: number;
   userId: string;
+  city?: string;
+  country?: string;
+  district?: string;
 };
 
-export const INCIDENT_TYPES = {
-  pet: "Mascotas",
-  theft: "Robo",
-  fire: "Incendio",
-  emergency: "Emergencia",
-  event: "Evento",
-  crash: "Accidente",
-  place: "Lugar Pagado",
-  other: "Otro",
-} as const;
-
-export type IncidentType = keyof typeof INCIDENT_TYPES;
-
-export const INCIDENT_INDICES: Record<number, IncidentType> = {
-  0: "pet",
-  1: "theft",
-  2: "fire",
-  3: "emergency",
-  4: "event",
-  5: "crash",
-  6: "place",
-};
+export type IncidentType = {
+  id: string;
+  name: string;
+  label: string;
+}
 
 export type Numbers = {
   City: string;
