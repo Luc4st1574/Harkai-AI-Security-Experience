@@ -1,15 +1,22 @@
 "use client";
 
 import { useDashboardMetrics } from "@/hooks/use-dashboard-metrics";
-import { Loader2, Download, CalendarDays } from "lucide-react"; // Icono nuevo
+import { Loader2, Download, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnalyticsCharts } from "@/components/dashboard/analytics-charts";
-import { cn } from "@/lib/utils"; // Para estilos condicionales
+import { cn } from "@/lib/utils";
+import { useConfig } from "@/lib/config/config-context";
+import { downloadIncidentsExcel } from "@/lib/excel-export";
 
 export default function AnalyticsPage() {
-  // 1. Extraemos 'filters' del hook para controlar el rango de fechas
   const { incidents, loading, filters } = useDashboardMetrics();
   const { timeRange, setTimeRange } = filters;
+  const { incidentMap } = useConfig();
+
+  const handleExport = () => {
+    if (incidents.length === 0) return;
+    downloadIncidentsExcel(incidents, incidentMap, `Reporte_Harkai_${timeRange}`);
+  };
 
   if (loading) {
     return (
@@ -32,7 +39,6 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 items-center w-full xl:w-auto">
-          {/* 2. Agregamos el selector de Rango de Tiempo */}
           <div className="flex items-center p-1 bg-muted/50 rounded-lg border border-border">
             <CalendarDays className="w-4 h-4 ml-3 mr-2 text-muted-foreground" />
             {(["24h", "7d", "30d", "all"] as const).map((range) => (
@@ -53,10 +59,14 @@ export default function AnalyticsPage() {
 
           <div className="h-4 w-px bg-border hidden sm:block" />
 
-          {/* Botón de exportación (aún visual) */}
-          <Button variant="outline" className="gap-2 w-full sm:w-auto">
+          <Button
+            variant="outline"
+            className="gap-2 w-full sm:w-auto hover:bg-green-50 hover:text-green-700 hover:border-green-200 dark:hover:bg-green-900/20 dark:hover:text-green-400 transition-all"
+            onClick={handleExport}
+            disabled={incidents.length === 0}
+          >
             <Download className="h-4 w-4" />
-            Exportar a Hojas de Cálculo
+            Exportar a Excel
           </Button>
         </div>
       </div>
