@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Github, Twitter, Linkedin, ShieldCheck, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -28,29 +28,6 @@ export function Footer() {
               Inteligencia urbana en tiempo real. Transformamos reportes
               ciudadanos en datos verificados para ciudades más seguras.
             </p>
-            <div className="flex space-x-6">
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <span className="sr-only">Twitter</span>
-                <Twitter className="h-5 w-5" />
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <span className="sr-only">GitHub</span>
-                <Github className="h-5 w-5" />
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <span className="sr-only">LinkedIn</span>
-                <Linkedin className="h-5 w-5" />
-              </Link>
-            </div>
           </div>
 
           {/* Links Grid */}
@@ -105,10 +82,7 @@ export function Footer() {
                       href="#"
                       className="text-sm leading-6 text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
                     >
-                      Mapa en Vivo{" "}
-                      <span className="text-[10px] bg-red-500/10 text-red-500 px-1.5 py-0.5 rounded-full font-medium">
-                        LIVE
-                      </span>
+                      Mapa en Vivo
                     </Link>
                   </li>
                   <li>
@@ -196,10 +170,6 @@ export function Footer() {
             derechos reservados.
           </p>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3" />
-              <span>Datos Encriptados</span>
-            </div>
             <div className="w-px h-3 bg-border" />
             <div className="flex items-center gap-1">
               <MapPin className="w-3 h-3" />
