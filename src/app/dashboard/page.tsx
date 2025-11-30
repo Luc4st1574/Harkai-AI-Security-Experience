@@ -13,10 +13,12 @@ import {
   Minus,
 } from "lucide-react";
 import { useDashboardMetrics } from "@/hooks/use-dashboard-metrics";
-import { INCIDENT_TYPES, INCIDENT_INDICES } from "@/lib/types";
+import { useConfig } from "@/lib/config/config-context";
 
 export default function DashboardPage() {
   const { metrics, incidents, loading, filters } = useDashboardMetrics();
+
+  const { incidentMap, incidentTypes } = useConfig();
 
   const TrendIcon =
     metrics.trend === "up"
@@ -53,7 +55,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {/* 1. Filtros de Tiempo ACTIVOS */}
+          {/* Filtros de Tiempo */}
           <div className="flex items-center p-1 bg-muted/50 rounded-lg border border-border">
             <Button
               variant={filters.timeRange === "24h" ? "secondary" : "ghost"}
@@ -81,34 +83,18 @@ export default function DashboardPage() {
             </Button>
           </div>
 
-          {/* 2. Filtro de Tipo (Ejemplo simple toggle para 'Robos') */}
           <Button
-            variant={
-              filters.selectedTypes.includes("theft") ? "default" : "outline"
-            }
             size="sm"
-            className="h-9 gap-2 text-xs"
-            onClick={() => {
-              // Lógica simple: Si está seleccionado lo quita, si no, lo pone como ÚNICO filtro
-              // (Para multi-select necesitarías una lógica un poco más compleja)
-              if (filters.selectedTypes.includes("theft")) {
-                filters.setSelectedTypes([]); // Reset
-              } else {
-                filters.setSelectedTypes(["theft"]); // Solo robos
-              }
-            }}
+            className="h-9 bg-primary text-primary-foreground shadow-lg shadow-primary/20"
           >
-            <Filter className="h-3.5 w-3.5" />
-            Solo Robos
+            Exportar Reporte
           </Button>
-
-          {/* ... Exportar ... */}
         </div>
       </div>
 
-      {/* --- KPIs Reales --- */}
+      {/* --- KPIs --- */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* KPI 1: Frecuencia (F) */}
+        {/* KPI 1 */}
         <div className="p-5 rounded-xl border border-border bg-card shadow-sm hover:border-primary/50 transition-colors group">
           <div className="flex justify-between items-start mb-2">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -131,7 +117,7 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* KPI 2: Recencia (R) */}
+        {/* KPI 2 */}
         <div className="p-5 rounded-xl border border-border bg-card shadow-sm hover:border-primary/50 transition-colors group">
           <div className="flex justify-between items-start mb-2">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -152,7 +138,7 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* KPI 3: Riesgo Calculado */}
+        {/* KPI 3 */}
         <div className="p-5 rounded-xl border border-primary/20 bg-primary/5 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 p-3 opacity-10">
             <AlertTriangle className="h-12 w-12 text-primary" />
@@ -168,7 +154,7 @@ export default function DashboardPage() {
             </h3>
           </div>
           <p className="text-[10px] text-muted-foreground mt-2 relative z-10 font-mono">
-            R = (0.6 × F) + (0.4 × R)
+            R = (0.6 x F) + (0.4 x R)
           </p>
         </div>
 
@@ -183,8 +169,8 @@ export default function DashboardPage() {
           {incidents.length > 0 ? (
             <div>
               <h3 className="text-sm font-bold text-foreground truncate">
-                {/* Traducimos el tipo usando tu diccionario */}
-                {INCIDENT_TYPES[incidents[0].type] || incidents[0].type}
+                {/* AHORA SÍ: incidentMap usa ID como clave, así que esto funciona directo */}
+                {incidentMap[incidents[0].type as any] || "Incidente"}
               </h3>
               <p className="text-[10px] text-muted-foreground mt-1 line-clamp-2">
                 {incidents[0].description}
@@ -201,9 +187,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* --- Main Content Split --- */}
+      {/* --- Main Content --- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
-        {/* Columna Izquierda: Mapa (Placeholder por ahora) */}
+        {/* Mapa */}
         <div className="lg:col-span-2 rounded-xl border border-border bg-card relative overflow-hidden flex flex-col">
           <div className="p-4 border-b border-border flex justify-between items-center bg-muted/20">
             <h3 className="font-semibold text-sm flex items-center gap-2">
@@ -225,7 +211,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Columna Derecha: Lista de Incidentes en Vivo */}
+        {/* Lista de Incidentes */}
         <div className="flex flex-col gap-6">
           <div className="rounded-xl border border-border bg-card flex-1 flex flex-col overflow-hidden">
             <div className="p-4 border-b border-border flex justify-between items-center">
@@ -240,12 +226,13 @@ export default function DashboardPage() {
                 >
                   <div className="flex gap-3 overflow-hidden">
                     <div className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0 text-red-500 font-bold text-xs">
-                      {/* Primera letra del tipo */}
-                      {(INCIDENT_TYPES[incident.type] || "?").charAt(0)}
+                      {/* Letra inicial desde el mapa (usando ID) */}
+                      {(incidentMap[incident.type as any] || "?").charAt(0)}
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-foreground truncate">
-                        {INCIDENT_TYPES[incident.type] || incident.type}
+                        {/* Nombre completo desde el mapa (usando ID) */}
+                        {incidentMap[incident.type as any] || "Desconocido"}
                       </p>
                       <p className="text-[10px] text-muted-foreground truncate">
                         {incident.description}
@@ -254,7 +241,6 @@ export default function DashboardPage() {
                   </div>
                   <div className="text-right shrink-0">
                     <p className="text-[10px] text-muted-foreground">
-                      {/* Formateo simple de hora */}
                       {incident.timestamp?.toDate().toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",

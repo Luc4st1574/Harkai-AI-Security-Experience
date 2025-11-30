@@ -27,7 +27,7 @@ export async function getIncidentTypes() {
 
       list.push({ id, name, label });
 
-      map[name] = label;
+      map[id] = label;
     });
 
     return { list, map };
