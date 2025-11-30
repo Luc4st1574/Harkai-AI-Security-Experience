@@ -60,51 +60,6 @@ export function HeroSection() {
             </Button>
           </div>
         </div>
-
-        {/* Dashboard Preview Mockup */}
-        <div className="mt-20 relative animate-in fade-in slide-in-from-bottom-12 duration-1000 fill-mode-backwards delay-700">
-          {/* Glow effect behind the image */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-emerald-500/30 rounded-2xl blur-2xl opacity-30"></div>
-
-          <div className="relative rounded-xl border border-border/50 bg-card/50 backdrop-blur-xl shadow-2xl overflow-hidden ring-1 ring-white/10">
-            {/* Fake UI Header */}
-            <div className="border-b border-border/50 px-4 py-3 flex items-center gap-2 bg-muted/20">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <div className="w-3 h-3 rounded-full bg-green-500/80" />
-              </div>
-              <div className="ml-4 h-6 w-64 rounded-full bg-muted/40 text-[10px] flex items-center px-3 text-muted-foreground">
-                harkai.app/dashboard/security-map
-              </div>
-            </div>
-
-            {/* Placeholder for the Dashboard Content */}
-            <div className="aspect-[16/9] bg-gradient-to-br from-background via-muted/10 to-muted/30 flex items-center justify-center relative">
-              {/* Abstraction of a map interface */}
-              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#fff_1px,transparent_1px)]"></div>
-
-              <div className="text-center p-8 z-10">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 border border-primary/20 mb-6 backdrop-blur-md shadow-lg shadow-primary/10 animate-pulse">
-                  <Map className="h-10 w-10 text-primary" />
-                </div>
-                <p className="text-muted-foreground font-medium">
-                  Aquí irá la visualización del Mapa de Calor en Tiempo Real
-                </p>
-                <div className="mt-4 flex justify-center gap-4 text-xs text-muted-foreground">
-                  <span className="flex items-center">
-                    <Activity className="w-3 h-3 mr-1 text-green-500" /> 98%
-                    Precisión
-                  </span>
-                  <span className="flex items-center">
-                    <ShieldCheck className="w-3 h-3 mr-1 text-primary" /> Datos
-                    Validados
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

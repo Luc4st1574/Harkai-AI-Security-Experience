@@ -47,11 +47,10 @@ export default function LoginPage() {
             <Image
               src="/harkai.png"
               alt="Harkai Logo"
-              width={40}
-              height={40}
+              width={90}
+              height={90}
               className="rounded-lg"
             />
-            <span className="text-xl font-bold tracking-tight">HARKAI</span>
           </div>
           <h2 className="text-4xl font-bold leading-tight max-w-md">
             Inteligencia urbana para decisiones seguras.
