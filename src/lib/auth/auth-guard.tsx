@@ -18,7 +18,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
+      <div className="flex h-screen w-full items-center justify-center bg-background mt-8">
         <div className="flex flex-col items-center gap-2">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <p className="text-xs text-muted-foreground animate-pulse">
@@ -35,7 +35,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (profile?.role !== "company" && profile?.role !== "admin") {
     return (
-      <div className="flex h-screen w-full flex-col items-center justify-center bg-background p-6 text-center animate-in fade-in zoom-in duration-300">
+      <div className="flex h-screen w-full flex-col items-center justify-center bg-background p-6 text-center animate-in fade-in zoom-in duration-300 mt-8">
         <div className="rounded-full bg-destructive/10 p-4 mb-6 ring-1 ring-destructive/20">
           <ShieldAlert className="h-12 w-12 text-destructive" />
         </div>

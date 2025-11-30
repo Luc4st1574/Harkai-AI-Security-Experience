@@ -2,29 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  LayoutDashboard, 
-  Map, 
-  ShieldAlert, 
-  FileText, 
-  Settings, 
+import {
+  LayoutDashboard,
+  ShieldAlert,
+  FileText,
+  Settings,
   LogOut,
-  Activity
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth/auth-context";
+import { ModeToggle } from "../mode-toggle";
 
 const sidebarItems = [
   {
     title: "Resumen",
     href: "/dashboard",
     icon: LayoutDashboard,
-  },
-  {
-    title: "Mapa en Vivo",
-    href: "/dashboard/map",
-    icon: Map,
   },
   {
     title: "Incidentes",
@@ -58,12 +52,12 @@ export function Sidebar() {
       <div className="h-16 flex items-center px-6 border-b border-border">
         <Link href="/" className="flex items-center gap-2 group">
           <div className="relative overflow-hidden rounded-md">
-             <Image 
-              src="/harkai.png" 
-              alt="Harkai Logo" 
-              width={80} 
-              height={80} 
-             />
+            <Image
+              src="/harkai.png"
+              alt="Harkai Logo"
+              width={80}
+              height={80}
+            />
           </div>
           {/* <span className="text-lg font-bold tracking-tight text-foreground">
             HARKAI <span className="text-[10px] font-normal text-muted-foreground ml-1">v1.0</span>
@@ -105,12 +99,8 @@ export function Sidebar() {
 
       {/* Status & Footer */}
       <div className="p-4 border-t border-border">
-        <div className="bg-secondary/30 rounded-lg p-3 mb-4 border border-border/50">
-            <div className="flex items-center gap-2 mb-1">
-                <Activity className="h-3 w-3 text-green-500" />
-                <span className="text-xs font-semibold text-foreground">Sistema Operativo</span>
-            </div>
-            <p className="text-[10px] text-muted-foreground">Última sinc: Hace 2s</p>
+        <div className="flex items-center gap-2 mb-1">
+          <ModeToggle />
         </div>
 
         <button className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors w-full" onClick={handleLogout}>
