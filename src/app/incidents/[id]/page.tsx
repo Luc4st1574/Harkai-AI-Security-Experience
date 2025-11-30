@@ -50,6 +50,7 @@ export default function IncidentPublicPage() {
   }, [params.id]);
 
   const handleDownload = () => {
+    console.log(APK_DOWNLOAD_URL)
     if (isAndroid) {
       const link = document.createElement('a');
       link.href = APK_DOWNLOAD_URL;
