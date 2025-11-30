@@ -49,7 +49,7 @@ export function HeroSection() {
           <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-7xl text-balance animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-backwards delay-150">
             Obtén analíticas en tiempo real <br className="hidden sm:block" />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-emerald-400">
-              de todo lo que pasa en la ciudad.
+              de todo lo que pasa en la ciudad
             </span>
           </h1>
 
@@ -58,7 +58,6 @@ export function HeroSection() {
             <RotatingText
               words={["Aseguradoras", "Municipios", "Consultoras", "Comercios"]}
             />
-            .
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-backwards delay-500">
