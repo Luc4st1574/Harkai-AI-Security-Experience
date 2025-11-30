@@ -7,6 +7,8 @@ import {
   Timestamp,
   QueryConstraint,
   where,
+  doc,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { HeatPoints } from "@/lib/types";
@@ -107,5 +109,24 @@ export async function createMockIncident(userId: string) {
     console.log(`Incidente tipo '${randomType}' creado en ${randomDistrict}.`);
   } catch (error) {
     console.error("Error creando mock:", error);
+  }
+}
+
+export async function getIncidentById(id: string): Promise<HeatPoints | null> {
+  try {
+    const docRef = doc(db, COLLECTION_NAME, id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return {
+        id: docSnap.id,
+        ...docSnap.data(),
+      } as HeatPoints;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error obteniendo incidente:", error);
+    return null;
   }
 }
