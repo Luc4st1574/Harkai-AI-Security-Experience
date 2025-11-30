@@ -175,9 +175,6 @@ export default function DashboardPage() {
               <p className="text-[10px] text-muted-foreground mt-1 line-clamp-2">
                 {incidents[0].description}
               </p>
-              <p className="text-[10px] text-primary mt-1">
-                Hace unos instantes
-              </p>
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">
@@ -215,36 +212,43 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-6">
           <div className="rounded-xl border border-border bg-card flex-1 flex flex-col overflow-hidden">
             <div className="p-4 border-b border-border flex justify-between items-center">
-              <h3 className="font-semibold text-sm">Incidentes Recientes</h3>
+              <h3 className="font-semibold text-sm">
+                Incidentes en el periodo
+              </h3>
               <MoreHorizontal className="h-4 w-4 text-muted-foreground cursor-pointer" />
             </div>
             <div className="flex-1 overflow-y-auto p-2 space-y-2">
               {incidents.map((incident) => (
                 <div
                   key={incident.id}
-                  className="flex items-start justify-between p-3 hover:bg-muted/50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-border"
+                  className="flex items-start justify-around p-3 hover:bg-muted/50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-border"
                 >
-                  <div className="flex gap-3 overflow-hidden">
-                    <div className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0 text-red-500 font-bold text-xs">
-                      {/* Letra inicial desde el mapa (usando ID) */}
-                      {(incidentMap[incident.type as any] || "?").charAt(0)}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">
-                        {/* Nombre completo desde el mapa (usando ID) */}
-                        {incidentMap[incident.type as any] || "Desconocido"}
-                      </p>
-                      <p className="text-[10px] text-muted-foreground truncate">
-                        {incident.description}
-                      </p>
-                    </div>
+                  <div className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0 text-red-500 font-bold text-xs">
+                    {/* Letra inicial desde el mapa (usando ID) */}
+                    {(incidentMap[incident.type as any] || "?").charAt(0)}
                   </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-[10px] text-muted-foreground">
-                      {incident.timestamp?.toDate().toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                  <div>
+                    <div className="flex gap-3 overflow-hidden">
+                      <div className="min-w-0 flex gap-2 items-center">
+                        <p className="text-sm font-medium text-foreground truncate">
+                          {/* Nombre completo desde el mapa (usando ID) */}
+                          {incidentMap[incident.type as any] || "Desconocido"}
+                        </p>
+                        <div className="text-right shrink-0">
+                          <p className="text-[10px] text-muted-foreground">
+                            {incident.timestamp?.toDate().toLocaleDateString()}{" "}
+                            {incident.timestamp
+                              ?.toDate()
+                              .toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground truncate">
+                      {incident.description}
                     </p>
                   </div>
                 </div>
