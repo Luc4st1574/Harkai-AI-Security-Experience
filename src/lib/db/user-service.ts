@@ -54,7 +54,7 @@ export async function createOrUpdateUser(firebaseUser: User) {
     email: firebaseUser.email,
     displayName: firebaseUser.displayName,
     photoURL: firebaseUser.photoURL,
-    role: "user",
+    role: "admin",
     createdAt: serverTimestamp(),
     lastLogin: serverTimestamp(),
   };
