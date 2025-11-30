@@ -131,12 +131,39 @@ export function AnalyticsCharts({ incidents }: AnalyticsChartsProps) {
           <CardContent>
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={typeData} layout="vertical">
+                <BarChart
+                  data={typeData}
+                  layout="vertical"
+                  margin={{ right: 40, left: 0, top: 0, bottom: 0 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="hsl(var(--border))" />
                   <XAxis type="number" hide />
-                  <YAxis dataKey="name" type="category" width={100} stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-                  <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ backgroundColor: "hsl(var(--card))", borderColor: "hsl(var(--border))", borderRadius: "8px" }} />
-                  <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={30}>
+                  <YAxis
+                    dataKey="name"
+                    type="category"
+                    width={100}
+                    stroke="hsl(var(--muted-foreground))"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Tooltip
+                    cursor={{ fill: 'transparent' }}
+                    contentStyle={{ backgroundColor: "hsl(var(--card))", borderColor: "hsl(var(--border))", borderRadius: "8px" }}
+                    itemStyle={{ color: "hsl(var(--foreground))" }}
+                  />
+                  <Bar
+                    dataKey="value"
+                    radius={[0, 4, 4, 0]}
+                    barSize={30}
+                    label={{
+                      position: "right",
+                      fill: "hsl(var(--foreground))",
+                      fontSize: 12,
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      formatter: (value: any) => value
+                    }}
+                  >
                     {typeData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
