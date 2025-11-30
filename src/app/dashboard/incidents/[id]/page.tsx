@@ -21,6 +21,7 @@ export default function IncidentPublicPage() {
   const [isAndroid, setIsAndroid] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
     if (/android/i.test(userAgent)) {
       setIsAndroid(true);
