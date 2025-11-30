@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, ShieldCheck, Activity, Map } from "lucide-react";
+import { ArrowRight, Play, ShieldCheck } from "lucide-react";
 
 export function HeroSection() {
   return (

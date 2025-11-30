@@ -29,10 +29,9 @@ const LIMA_COORDS: [number, number] = [-12.046374, -77.042793];
 const DEFAULT_ZOOM = 13;
 
 const INCIDENT_COLORS: Record<number, string> = {
-  0: "#ef4444",
-  1: "#f97316",
-  2: "#eab308",
-  4: "#3b82f6",
+  1: "#2196f3",
+  2: "#795547",
+  4: "#b61c1c",
 };
 
 interface IncidentMapProps {
