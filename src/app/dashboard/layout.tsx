@@ -11,7 +11,7 @@ export default function DashboardLayout({
       <div className="min-h-screen bg-background">
         <Sidebar />
 
-        <main className="md:ml-64 min-h-screen transition-all duration-300">
+        <main className="md:ml-64 min-h-screen transition-all duration-300 pt-16 md:pt-0">
           <div className="container mx-auto p-4 lg:p-8 max-w-7xl">
             {children}
           </div>
