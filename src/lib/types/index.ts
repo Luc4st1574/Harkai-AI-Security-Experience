@@ -8,7 +8,7 @@ export type HeatPoints = {
   latitude: number;
   longitude: number;
   timestamp: Timestamp;
-  type: string;
+  type: IncidentType;
   userId: string;
 };
 
