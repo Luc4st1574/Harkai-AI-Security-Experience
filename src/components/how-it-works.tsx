@@ -6,21 +6,21 @@ export function HowItWorksSection() {
       id: "01",
       title: "Reporte Ciudadano Instantáneo",
       description:
-        "Cualquier persona reporta un incidente (robo, accidente, incendio) enviando una foto o audio vía WhatsApp o nuestra App. Sin formularios complejos.",
+        "Cualquier persona reporta un incidente (robo, accidente, incendio) mediante nuestra App. Sin formularios complejos.",
       icon: MessageSquareText,
     },
     {
       id: "02",
       title: "Verificación y Triaje con IA",
       description:
-        "Nuestros algoritmos analizan el reporte en milisegundos: validan la ubicación, filtran noticias falsas (fake news) y clasifican la gravedad.",
+        "Nuestros algoritmos analizan el reporte en milisegundos: validan la ubicación y clasifican la gravedad.",
       icon: ScanSearch,
     },
     {
       id: "03",
       title: "Inteligencia Accionable",
       description:
-        "La información validada aparece en tu Dashboard en tiempo real. Se generan alertas automáticas y se actualizan los mapas de calor de riesgo.",
+        "La información validada aparece en tu Dashboard en tiempo real.",
       icon: Map,
     },
   ];

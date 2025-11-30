@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 const features = [
   {
     title: "Para Aseguradoras",
-    description: "Calcula pólizas con precisión milimétrica.",
+    description: "Mejora la rentabilidad de tu negocio con los precios de primas ideales. ",
     icon: ShieldAlert,
     pain: "Reportes policiales atrasados y datos estáticos por distrito.",
     solution:
@@ -58,11 +58,10 @@ export function FeaturesSection() {
             Sectores & Soluciones
           </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Transformamos la incertidumbre en datos
+            Obtén la data necesaria más rápido y barato
           </p>
           <p className="mt-4 text-lg text-muted-foreground">
-            Dejamos atrás los reportes estáticos. Harkai ofrece inteligencia
-            viva para quienes toman decisiones críticas en la ciudad.
+            Deja atrás las fuentes públicas y desactualizadas. Harkai ofrece la información que necesitas en tiempo real para optimizar tu toma de decisiones.
           </p>
         </div>
 
