@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Filter,
   Map as MapIcon,
   AlertTriangle,
   TrendingUp,
@@ -11,14 +10,24 @@ import {
   Loader2,
   TrendingDown,
   Minus,
+  MapPin, // Nuevo icono para el distrito
 } from "lucide-react";
 import { useDashboardMetrics } from "@/hooks/use-dashboard-metrics";
 import { useConfig } from "@/lib/config/config-context";
 
+// Distritos disponibles (Idealmente esto vendría de una colección 'districts' en Firebase)
+const DISTRICTS = [
+  { value: "all", label: "Todo Lima" },
+  { value: "La Molina", label: "La Molina" },
+  { value: "Miraflores", label: "Miraflores" },
+  { value: "San Isidro", label: "San Isidro" },
+  { value: "Lima", label: "Cercado de Lima" },
+  { value: "Lince", label: "Lince" },
+];
+
 export default function DashboardPage() {
   const { metrics, incidents, loading, filters } = useDashboardMetrics();
-
-  const { incidentMap, incidentTypes } = useConfig();
+  const { incidentMap } = useConfig();
 
   const TrendIcon =
     metrics.trend === "up"
@@ -55,6 +64,22 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* Selector de Distrito (NUEVO) */}
+          <div className="relative">
+            <MapPin className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <select
+              value={filters.district}
+              onChange={(e) => filters.setDistrict(e.target.value)}
+              className="h-9 pl-9 pr-4 rounded-md border border-input bg-background text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 w-[180px] appearance-none cursor-pointer"
+            >
+              {DISTRICTS.map((d) => (
+                <option key={d.value} value={d.value}>
+                  {d.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Filtros de Tiempo */}
           <div className="flex items-center p-1 bg-muted/50 rounded-lg border border-border">
             <Button
@@ -113,7 +138,8 @@ export default function DashboardPage() {
             </span>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            Incidentes totales activos
+            Incidentes activos en{" "}
+            {filters.district === "all" ? "Lima" : filters.district}
           </p>
         </div>
 
@@ -169,12 +195,18 @@ export default function DashboardPage() {
           {incidents.length > 0 ? (
             <div>
               <h3 className="text-sm font-bold text-foreground truncate">
-                {/* AHORA SÍ: incidentMap usa ID como clave, así que esto funciona directo */}
-                {incidentMap[incidents[0].type as any] || "Incidente"}
+                {incidentMap[incidents[0].type] || `Tipo ${incidents[0].type}`}
               </h3>
               <p className="text-[10px] text-muted-foreground mt-1 line-clamp-2">
                 {incidents[0].description}
               </p>
+              <div className="flex justify-between items-center mt-1">
+                {incidents[0].district && (
+                  <span className="text-[9px] bg-secondary px-1.5 py-0.5 rounded text-muted-foreground">
+                    {incidents[0].district}
+                  </span>
+                )}
+              </div>
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">
@@ -212,51 +244,59 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-6">
           <div className="rounded-xl border border-border bg-card flex-1 flex flex-col overflow-hidden">
             <div className="p-4 border-b border-border flex justify-between items-center">
-              <h3 className="font-semibold text-sm">
-                Incidentes en el periodo
-              </h3>
+              <h3 className="font-semibold text-sm">Incidentes del periodo</h3>
               <MoreHorizontal className="h-4 w-4 text-muted-foreground cursor-pointer" />
             </div>
             <div className="flex-1 overflow-y-auto p-2 space-y-2">
               {incidents.map((incident) => (
                 <div
                   key={incident.id}
-                  className="flex items-start justify-around p-3 hover:bg-muted/50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-border"
+                  className="flex items-start justify-between p-3 hover:bg-muted/50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-border"
                 >
-                  <div className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0 text-red-500 font-bold text-xs">
-                    {/* Letra inicial desde el mapa (usando ID) */}
-                    {(incidentMap[incident.type as any] || "?").charAt(0)}
-                  </div>
-                  <div>
-                    <div className="flex gap-3 overflow-hidden">
-                      <div className="min-w-0 flex gap-2 items-center">
-                        <p className="text-sm font-medium text-foreground truncate">
-                          {/* Nombre completo desde el mapa (usando ID) */}
-                          {incidentMap[incident.type as any] || "Desconocido"}
-                        </p>
-                        <div className="text-right shrink-0">
-                          <p className="text-[10px] text-muted-foreground">
-                            {incident.timestamp?.toDate().toLocaleDateString()}{" "}
-                            {incident.timestamp
-                              ?.toDate()
-                              .toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
-                          </p>
-                        </div>
-                      </div>
+                  <div className="flex gap-3 overflow-hidden">
+                    <div className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0 text-red-500 font-bold text-xs">
+                      {/* Letra inicial desde el mapa o ID */}
+                      {(incidentMap[incident.type] || "?").charAt(0)}
                     </div>
-                    <p className="text-[10px] text-muted-foreground truncate">
-                      {incident.description}
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">
+                        {incidentMap[incident.type] || "Desconocido"}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground truncate">
+                        {incident.description}
+                      </p>
+                      {incident.district && (
+                        <p className="text-[9px] text-muted-foreground mt-0.5">
+                          📍 {incident.district}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-[10px] text-muted-foreground">
+                      {incident.timestamp?.toDate().toLocaleDateString([], {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                      })}
+                      {" "}
+                      {incident.timestamp?.toDate().toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
                   </div>
                 </div>
               ))}
               {incidents.length === 0 && (
-                <p className="text-center text-sm text-muted-foreground py-10">
-                  No hay incidentes reportados.
-                </p>
+                <div className="flex flex-col items-center justify-center h-full text-center p-4 space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    No hay incidentes reportados en esta zona.
+                  </p>
+                  <p className="text-xs text-muted-foreground/50">
+                    Intenta cambiar el filtro de distrito o tiempo.
+                  </p>
+                </div>
               )}
             </div>
           </div>

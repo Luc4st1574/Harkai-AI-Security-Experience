@@ -12,7 +12,6 @@ const RISK_THRESHOLDS: Record<TimeRange, number> = {
   all: 1000,
 };
 
-// IDs según tu Base de Datos: 1=Crash, 2=Theft, 4=Emergency
 const DEFAULT_FILTER_IDS = [1, 2, 4];
 
 // Mapa de pesos de riesgo específico
@@ -25,10 +24,10 @@ export function useDashboardMetrics() {
   const [loading, setLoading] = useState(true);
 
   const [timeRange, setTimeRange] = useState<TimeRange>("24h");
-
-  // Ahora usamos number[] para filtrar por IDs reales
   const [selectedTypes, setSelectedTypes] =
     useState<number[]>(DEFAULT_FILTER_IDS);
+
+  const [district, setDistrict] = useState<string>("all");
 
   useEffect(() => {
     setLoading(true);
@@ -52,13 +51,13 @@ export function useDashboardMetrics() {
       {
         startDate,
         types: selectedTypes,
+        district,
       }
     );
 
     return () => unsubscribe();
-  }, [timeRange, selectedTypes]);
+  }, [timeRange, selectedTypes, district]);
 
-  // Cálculo de Métricas optimizado con useMemo
   const metrics = useMemo(() => {
     const frequency = incidents.length;
 
@@ -68,14 +67,12 @@ export function useDashboardMetrics() {
 
     const now = new Date().getTime();
     let totalRecencyWeight = 0;
-    let weightedFrequency = 0; // Frecuencia ponderada por tipo de incidente
+    let weightedFrequency = 0;
 
     incidents.forEach((inc) => {
-      // 1. Cálculo de Riesgo Ponderado (Crash vale 0.4)
       const weight = RISK_WEIGHTS[inc.type] ?? 1.0;
       weightedFrequency += weight;
 
-      // 2. Cálculo de Recency (Antigüedad)
       const incidentTime = inc.timestamp.toDate().getTime();
       const diffHours = (now - incidentTime) / (1000 * 60 * 60);
 
@@ -87,7 +84,6 @@ export function useDashboardMetrics() {
     const recencyScore = totalRecencyWeight / frequency;
     const currentMaxThreshold = RISK_THRESHOLDS[timeRange];
 
-    // Usamos la frecuencia ponderada para el cálculo final del riesgo
     const normalizedFrequency = Math.min(
       (weightedFrequency / currentMaxThreshold) * 100,
       100
@@ -101,9 +97,9 @@ export function useDashboardMetrics() {
     const trend = riskScore > 50 ? "up" : "stable";
 
     return {
-      frequency, // Mostramos la cantidad real al usuario
+      frequency,
       recency: recencyScore.toFixed(2),
-      risk: riskScore, // Pero el riesgo calculado es más bajo si hay muchos choques
+      risk: riskScore,
       trend,
     };
   }, [incidents, timeRange]);
@@ -116,6 +112,8 @@ export function useDashboardMetrics() {
       setTimeRange,
       selectedTypes,
       setSelectedTypes,
+      district,
+      setDistrict,
     },
     loading,
   };
