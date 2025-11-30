@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Loader2, Map as MapIcon } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useDashboardMetrics } from "@/hooks/use-dashboard-metrics";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { KpiGrid } from "@/components/dashboard/kpi-grid";
