@@ -1,37 +1,40 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { HeatPoints } from "@/lib/types";
 import { useConfig } from "@/lib/config/config-context";
-
-const iconUrl = "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png";
-const iconRetinaUrl =
-  "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png";
-const shadowUrl =
-  "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png";
-
-const DefaultIcon = L.icon({
-  iconUrl,
-  iconRetinaUrl,
-  shadowUrl,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
-
-L.Marker.prototype.options.icon = DefaultIcon;
+import { useTheme } from "next-themes";
 
 const LIMA_COORDS: [number, number] = [-12.046374, -77.042793];
 const DEFAULT_ZOOM = 13;
 
+const MAP_STYLES = {
+  light: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Positron
+  dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", // Dark Matter
+};
+
 const INCIDENT_COLORS: Record<number, string> = {
   1: "#2196f3",
-  2: "#795547",
+  2: "#9929af",
   4: "#b61c1c",
+};
+
+const createCustomIcon = (color: string) => {
+  return L.divIcon({
+    className: "bg-transparent", // Clase vacía para evitar estilos default cuadrados
+    html: `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${color}" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); width: 100%; height: 100%;">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+        <circle cx="12" cy="10" r="3" fill="white"></circle>
+      </svg>
+    `,
+    iconSize: [35, 35],
+    iconAnchor: [17.5, 35],
+    popupAnchor: [0, -35],
+  });
 };
 
 interface IncidentMapProps {
@@ -40,11 +43,16 @@ interface IncidentMapProps {
 
 export default function IncidentMap({ incidents }: IncidentMapProps) {
   const { incidentMap } = useConfig();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Aquí podrías agregar lógica para auto-centrar el mapa en el nuevo promedio de puntos
-    // si quisieras un enfoque más dinámico.
-  }, [incidents]);
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  const tileUrl = resolvedTheme === "dark" ? MAP_STYLES.dark : MAP_STYLES.light;
 
   return (
     <div className="h-full w-full relative z-0">
@@ -57,15 +65,22 @@ export default function IncidentMap({ incidents }: IncidentMapProps) {
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          url={tileUrl}
         />
 
         {incidents.map((incident) => {
           if (!incident.latitude || !incident.longitude) return null;
 
+          // 1. Determinamos el color basado en el tipo (o gris por defecto)
+          const color = INCIDENT_COLORS[incident.type] || "#64748b";
+
           return (
             <div key={incident.id}>
-              <Marker position={[incident.latitude, incident.longitude]}>
+              {/* 2. Usamos createCustomIcon pasando el color dinámico */}
+              <Marker
+                position={[incident.latitude, incident.longitude]}
+                icon={createCustomIcon(color)}
+              >
                 <Popup>
                   <div className="text-sm">
                     <strong className="block text-foreground mb-1">
@@ -81,11 +96,12 @@ export default function IncidentMap({ incidents }: IncidentMapProps) {
                 </Popup>
               </Marker>
 
+              {/* 3. El círculo usa la misma variable 'color' para mantener consistencia */}
               <Circle
                 center={[incident.latitude, incident.longitude]}
                 pathOptions={{
-                  color: INCIDENT_COLORS[incident.type] || "#64748b",
-                  fillColor: INCIDENT_COLORS[incident.type] || "#64748b",
+                  color: color,
+                  fillColor: color,
                   fillOpacity: 0.2,
                 }}
                 radius={300}
